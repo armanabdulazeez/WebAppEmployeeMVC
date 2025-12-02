@@ -3,7 +3,10 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between mb-3">
         <h2>Employees</h2>
-        <a class="btn btn-success" asp-action="Create">Create Employee</a>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createUserModal">
+            Create Employee
+        </button>
+
     </div>
 
     <table id="employeesTable" class="table table-bordered table-striped">
@@ -21,7 +24,7 @@
             </tr>
         </thead>
 
-        <tbody></tbody> 
+        <tbody></tbody>
     </table>
 </div>
 
@@ -40,6 +43,55 @@
     </div>
 </div>
 
+<div class="modal fade" id="createUserModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-3">
+
+            <h5 class="fw-bold mb-3">Create User</h5>
+
+            <input id="uUsername" class="form-control mb-2" placeholder="Username" />
+            <input id="uPassword" type="password" class="form-control mb-2" placeholder="Password" />
+            <input id="uConfirm" type="password" class="form-control mb-3" placeholder="Confirm Password" />
+
+            <button class="btn btn-success w-100" onclick="createUser()">Next</button>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createEmployeeModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-3">
+
+            <h5 class="fw-bold mb-3">Create Employee</h5>
+
+            <input id="eFullName" class="form-control mb-2" placeholder="Full Name" />
+
+            <select id="eDepartment" class="form-control mb-2">
+                <option value="">Select Department</option>
+                <option>HR</option>
+                <option>IT</option>
+                <option>Finance</option>
+            </select>
+
+            <select id="eDesignation" class="form-control mb-2">
+                <option value="">Select Designation</option>
+                <option>Manager</option>
+                <option>Developer</option>
+                <option>Analyst</option>
+            </select>
+
+            <input id="eSalary" type="number" class="form-control mb-3" placeholder="Salary" />
+
+            <input id="eUserId" type="hidden" />
+
+            <button class="btn btn-primary w-100" onclick="createEmployee()">Create Employee</button>
+
+        </div>
+    </div>
+</div>
+
+
 @section Scripts {
 
     <script>
@@ -52,7 +104,7 @@
                 pagelength:5,
                 lengthMenu: [5, 10, 20, 50],
                 ajax: {
-                    url: 'http://localhost:5127/api/Employees/GetAllEmployeesServer', 
+                    url: 'http://localhost:5127/api/Employees/GetAllEmployeesServer',
                     type: 'GET'
                 },
 
@@ -91,6 +143,43 @@
                 $("#detailsModalBody").html(html);
                 $("#detailsModal").modal("show");
             });
+        }
+
+        function createUser() {
+            let payload = {
+                username: $("#uUsername").val(),
+                password: $("#uPassword").val(),
+                confirmPassword: $("#uConfirm").val()
+            };
+
+            $.post("/Employees/CreateUser", payload)
+                .done(res => {
+                    if (!res.userId) {
+                        alert("User creation failed");
+                        return;
+                    }
+
+                    $("#eUserId").val(res.userId);
+
+                    $("#createUserModal").modal('hide');
+                    $("#createEmployeeModal").modal('show');
+                });
+        }
+
+        function createEmployee() {
+            let payload = {
+                fullName: $("#eFullName").val(),
+                department: $("#eDepartment").val(),
+                designation: $("#eDesignation").val(),
+                salary: $("#eSalary").val(),
+                userId: $("#eUserId").val()
+            };
+
+            $.post("/Employees/CreateEmployee", payload)
+                .done(res => {
+                    alert("Employee created successfully!");
+                    location.reload();
+                });
         }
     </script>
 

@@ -70,11 +70,11 @@ namespace WebAppEmpMVC.Controllers
         }
 
 
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();  
-        }
+        //[HttpGet]
+        //public IActionResult Create()
+        //{
+        //    return View();  
+        //}
 
         //[HttpPost]
         //public async Task<IActionResult> Create(CreateEmpViewModel model)
@@ -92,6 +92,26 @@ namespace WebAppEmpMVC.Controllers
         //    ModelState.AddModelError("", "Failed to create employee.");
         //    return View(model);
         //}
+
+        [HttpPost]
+        public async Task<IActionResult> CreateUser(UserEntryViewModel model)
+        {
+            var response = await _httpClient.PostAsAsync<UserResponseViewModel>(
+                ApiConstants.RegisterUser, model
+            );
+
+            return Json(response);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateEmployee(EmployeeEntryViewModel model)
+        {
+            var response = await _httpClient.PostAsAsync<EmployeeResponseViewModel>(
+                ApiConstants.CreateEmployee, model
+            );
+
+            return Json(response);
+        }
 
     }
 }
