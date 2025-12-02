@@ -1,0 +1,62 @@
+﻿@model WebAppEmpMVC.Models.ViewModels.EmployeeViewModel
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <h3 class="text-center mb-4">Employee Details</h3>
+
+            <div class="mb-3">
+                <label class="fw-bold">Full Name:</label>
+                <div>@Model.FullName</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="fw-bold">Department:</label>
+                <div>@Model.Department</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="fw-bold">Designation:</label>
+                <div>@Model.Designation</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="fw-bold">Salary:</label>
+                <div>@Model.Salary</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="fw-bold">Join Date:</label>
+                <div>@Model.JoinDate.ToShortDateString()</div>
+            </div>
+
+            <hr />
+
+            <h5 class="fw-bold text-center">Addresses</h5>
+
+            @if (Model.Addresses != null && Model.Addresses.Any())
+            {
+                foreach (var addr in Model.Addresses)
+                {
+                    <div class="mt-3 border-bottom pb-2">
+                        <div><strong>House No:</strong> @addr.HouseNo</div>
+                        <div><strong>House Name:</strong> @addr.HouseName</div>
+                        <div><strong>Place:</strong> @addr.Place</div>
+                        <div><strong>City:</strong> @addr.City</div>
+                        <div><strong>State:</strong> @addr.State</div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-center text-muted">No addresses found.</p>
+            }
+
+            <div class="text-center mt-4">
+                <a class="btn btn-secondary" href="/Employees">Back</a>
+            </div>
+
+        </div>
+    </div>
+</div>

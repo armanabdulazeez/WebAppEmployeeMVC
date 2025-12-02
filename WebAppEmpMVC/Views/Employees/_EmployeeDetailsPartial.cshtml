@@ -1,0 +1,33 @@
+﻿@model WebAppEmpMVC.Models.ViewModels.EmployeeViewModel
+
+<div>
+    <p><strong>Full Name:</strong> @Model.FullName</p>
+    <p><strong>Department:</strong> @Model.Department</p>
+    <p><strong>Designation:</strong> @Model.Designation</p>
+    <p><strong>Salary:</strong> @Model.Salary</p>
+    <p><strong>Join Date:</strong> @Model.JoinDate.ToString("yyyy-MM-dd")</p>
+    <p><strong>Username:</strong> @Model.Username</p>
+    <p><strong>Role:</strong> @Model.Role</p>
+
+    <h5 class="mt-3">Addresses</h5>
+    <hr />
+
+    @if (Model?.Addresses != null && Model.Addresses.Any())
+    {
+        foreach (var a in Model.Addresses)
+        {
+            <div class="border p-2 mb-2">
+                <p><strong>House No:</strong> @(a?.HouseNo ?? "-")</p>
+                <p><strong>House Name:</strong> @(a?.HouseName ?? "-")</p> 
+                <p><strong>Place:</strong> @(a?.Place ?? "-")</p>
+                <p><strong>City:</strong> @(a?.City ?? "-")</p>
+                <p><strong>State:</strong> @(a?.State ?? "-")</p>
+            </div>
+        }
+    }
+    else
+    {
+        <p class="text-muted">No addresses found for this employee.</p>
+    }
+
+</div>

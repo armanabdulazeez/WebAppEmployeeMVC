@@ -1,0 +1,29 @@
+﻿@using WebAppEmpMVC.Models.ViewModels
+@model LoginViewModel
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+        <h3 class="text-center mb-3">Login</h3>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+
+        <form method="post">
+            <div class="mb-3">
+                <label class="fw-bold">Username</label>
+                <input asp-for="Username" class="form-control" required/>
+            </div>
+
+            <div class="mb-3">
+                <label class="fw-bold">Password</label>
+                <input asp-for="Password" class="form-control" type="password" required />
+            </div>
+
+            <div class="text-center">
+                <button class="btn btn-primary w-100">Login</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,97 @@
+﻿@model WebAppEmpMVC.Models.Dto.PaginatedResponseDto<WebAppEmpMVC.Models.ViewModels.EmployeeViewModel>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between mb-3">
+        <h2>Employees</h2>
+        <a class="btn btn-success" asp-action="Create">Create Employee</a>
+    </div>
+
+    <table id="employeesTable" class="table table-bordered table-striped">
+        <thead class="fw-bold">
+            <tr>
+                <td>ID</td>
+                <td>Full Name</td>
+                <td>Department</td>
+                <td>Designation</td>
+                <td>Salary</td>
+                <td>Join Date</td>
+                <td>Username</td>
+                <td>Role</td>
+                <td>Actions</td>
+            </tr>
+        </thead>
+
+        <tbody></tbody> 
+    </table>
+</div>
+
+<div class="modal fade" id="detailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Employee Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body" id="detailsModalBody"></div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+
+            $('#employeesTable').DataTable({
+                processing: true,
+                serverSide: true,
+                responsive: false,
+                pagelength:5,
+                lengthMenu: [5, 10, 20, 50],
+                ajax: {
+                    url: 'http://localhost:5127/api/Employees/GetAllEmployeesServer', 
+                    type: 'GET'
+                },
+
+                columns: [
+                    { data: "employeeId" },
+                    { data: "fullName" },
+                    { data: "department" },
+                    { data: "designation" },
+                    { data: "salary" },
+                    {
+                        data: "joinDate",
+                        render: function (data) {
+                            return data ? data.substring(0, 10) : "";
+                        }
+                    },
+                    { data: "user.username" },
+                    { data: "user.role" },
+
+                    {
+                        data: "employeeId",
+                        orderable: false,
+                        searchable: false,
+                        render: function (id) {
+                            return `<a class="btn btn-primary btn-sm" href="/Employees/Edit/${id}">Edit</a>
+                                <button class="btn btn-info btn-sm" onclick="loadEmployeeDetails(${id})">Details</button>
+                                <a class="btn btn-danger btn-sm" href="/Employees/Delete/${id}">Delete</a>`;
+                        }
+                    }
+                ]
+            });
+
+        });
+
+        function loadEmployeeDetails(id) {
+            $.get("/Employees/DetailsPartial/" + id, function (html) {
+                $("#detailsModalBody").html(html);
+                $("#detailsModal").modal("show");
+            });
+        }
+    </script>
+
+}
