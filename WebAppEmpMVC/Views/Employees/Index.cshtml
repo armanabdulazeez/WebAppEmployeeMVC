@@ -49,15 +49,25 @@
 
             <h5 class="fw-bold mb-3">Create User</h5>
 
-            <input id="uUsername" class="form-control mb-2" placeholder="Username" />
-            <input id="uPassword" type="password" class="form-control mb-2" placeholder="Password" />
-            <input id="uConfirm" type="password" class="form-control mb-3" placeholder="Confirm Password" />
+            <form id="userForm" class="needs-validation" novalidate>
 
-            <button class="btn btn-success w-100" onclick="createUser()">Next</button>
+                <input id="uUsername" class="form-control mb-2" placeholder="Username" required />
+                <div class="invalid-feedback">Username is required.</div>
+
+                <input id="uPassword" type="password" class="form-control mb-2" placeholder="Password" required />
+                <div class="invalid-feedback">Password is required.</div>
+
+                <input id="uConfirm" type="password" class="form-control mb-3" placeholder="Confirm Password" required />
+                <div class="invalid-feedback" id="uConfirmFeedback"></div>
+
+                <button type="button" class="btn btn-success w-100" onclick="validateUser()">Next</button>
+
+            </form>
 
         </div>
     </div>
 </div>
+
 
 <div class="modal fade" id="createEmployeeModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
@@ -65,31 +75,40 @@
 
             <h5 class="fw-bold mb-3">Create Employee</h5>
 
-            <input id="eFullName" class="form-control mb-2" placeholder="Full Name" />
+            <form id="employeeForm" class="needs-validation" novalidate>
 
-            <select id="eDepartment" class="form-control mb-2">
-                <option value="">Select Department</option>
-                <option>HR</option>
-                <option>IT</option>
-                <option>Finance</option>
-            </select>
+                <input id="eFullName" class="form-control mb-2" placeholder="Full Name" required />
+                <div class="invalid-feedback">Full Name is required.</div>
 
-            <select id="eDesignation" class="form-control mb-2">
-                <option value="">Select Designation</option>
-                <option>Manager</option>
-                <option>Developer</option>
-                <option>Analyst</option>
-            </select>
+                <select id="eDepartment" class="form-control mb-2" required>
+                    <option value="">Select Department</option>
+                    <option>HR</option>
+                    <option>IT</option>
+                    <option>Finance</option>
+                </select>
+                <div class="invalid-feedback">Please select a department.</div>
 
-            <input id="eSalary" type="number" class="form-control mb-3" placeholder="Salary" />
+                <select id="eDesignation" class="form-control mb-2" required>
+                    <option value="">Select Designation</option>
+                    <option>Manager</option>
+                    <option>Developer</option>
+                    <option>Analyst</option>
+                </select>
+                <div class="invalid-feedback">Please select a designation.</div>
 
-            <input id="eUserId" type="hidden" />
+                <input id="eSalary" type="number" class="form-control mb-3" placeholder="Salary" required />
+                <div class="invalid-feedback">Salary is required.</div>
 
-            <button class="btn btn-primary w-100" onclick="createEmployee()">Create Employee</button>
+                <input id="eUserId" type="hidden" />
+
+                <button type="button" class="btn btn-primary w-100" onclick="validateEmployee()">Create Employee</button>
+
+            </form>
 
         </div>
     </div>
 </div>
+
 
 
 @section Scripts {
@@ -144,6 +163,56 @@
                 $("#detailsModal").modal("show");
             });
         }
+
+        function validateConfirmPassword() {
+            const password = $("#uPassword").val();
+            const confirm = $("#uConfirm").val();
+            const confirmInput = $("#uConfirm")[0];
+            const feedback = $("#uConfirmFeedback")[0];
+
+            confirmInput.setCustomValidity("");
+            feedback.textContent = "Confirm Password is required";
+
+            if (!confirm) {
+                confirmInput.setCustomValidity("Confirm Password is required");
+                return;
+            }
+
+            if (password !== confirm) {
+                confirmInput.setCustomValidity("Passwords do not match");
+                feedback.textContent = "Passwords do not match";
+                return;
+            }
+
+            confirmInput.setCustomValidity("");
+        }
+
+        function validateUser() {
+            const form = document.getElementById("userForm");
+
+            validateConfirmPassword();
+
+            if (!form.checkValidity()) {
+                form.classList.add("was-validated");
+                return;
+            }
+
+            createUser();
+        }
+
+        $("#uPassword, #uConfirm").on("input", validateConfirmPassword );
+
+        function validateEmployee() {
+            const form = document.getElementById("employeeForm");
+
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated');
+                return;
+            }
+
+            createEmployee();
+        }
+
 
         function createUser() {
             let payload = {
