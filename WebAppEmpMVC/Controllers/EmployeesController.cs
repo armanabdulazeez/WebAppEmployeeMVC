@@ -113,5 +113,18 @@ namespace WebAppEmpMVC.Controllers
             return Json(response);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            string url = $"{ApiConstants.DeleteEmployee}/{id}";
+
+            bool isSuccess = await _httpClient.DeleteAsAsync(url);
+
+            if (isSuccess)
+                return Json(true);
+
+            return BadRequest("Delete failed");
+        }
+
     }
 }

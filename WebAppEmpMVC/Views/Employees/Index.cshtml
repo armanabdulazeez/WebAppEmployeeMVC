@@ -149,7 +149,7 @@
                         render: function (id) {
                             return `<a class="btn btn-primary btn-sm" href="/Employees/Edit/${id}">Edit</a>
                                 <button class="btn btn-info btn-sm" onclick="loadEmployeeDetails(${id})">Details</button>
-                                <a class="btn btn-danger btn-sm" href="/Employees/Delete/${id}">Delete</a>`;
+                               <button class="btn btn-danger btn-sm" onclick="deleteEmployee(${id})">Delete</button>`;
                         }
                     }
                 ]
@@ -250,6 +250,22 @@
                     location.reload();
                 });
         }
+
+    function deleteEmployee(id) {
+        if (!confirm(`Are you sure you want to delete Employee ID: ${id}?`)) {
+            return; 
+        }
+
+        $.post("/Employees/Delete/" + id)
+            .done(res => {
+                alert("Employee deleted successfully.");
+                location.reload();
+            })
+            .fail(() => {
+                alert("Failed to delete employee.");
+            });
+    }
+
     </script>
 
 }
