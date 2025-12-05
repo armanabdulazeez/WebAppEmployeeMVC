@@ -71,18 +71,16 @@ namespace WebAppEmpMVC.HttpClients
             return isUpdated;
         }
 
-        public async Task<TResponse> DeleteAsAsync<TResponse>(string Address, TResponse isDeleted)
+        public async Task<bool> DeleteAsAsync(string address)
         {
             AddToken();
-            var request = new HttpRequestMessage(HttpMethod.Delete, Address);
-            var response = await _client.SendAsync(request);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadAsStringAsync();
-                isDeleted = JsonConvert.DeserializeObject<TResponse>(result);
-            }
-            return isDeleted;
+
+            var response = await _client.DeleteAsync(address);
+
+            return response.IsSuccessStatusCode;
         }
+
+
 
         private void AddToken()
         {

@@ -14,5 +14,6 @@
         public const string GetEmployeeDetails = "/api/Employees/GetEmployeeById";
         public const string CreateEmployee = "/api/Employees/CreateEmployee";
         public const string RegisterUser = "/api/Users/register";
+        public const string DeleteEmployee = "/api/Employees/DeleteEmployee";
     }
 }
